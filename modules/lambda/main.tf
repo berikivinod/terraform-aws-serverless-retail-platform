@@ -40,7 +40,10 @@ resource "aws_iam_role_policy" "dynamodb_access" {
           "dynamodb:Scan",
           "dynamodb:GetItem",
           "dynamodb:Query",
-          "dynamodb:PutItem"
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:UpdateItem"
+
         ]
 
         Resource = "*"

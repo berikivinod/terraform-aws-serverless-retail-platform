@@ -376,6 +376,127 @@ resource "aws_lambda_permission" "delete_cart" {
 
 }
 
+resource "aws_api_gateway_resource" "orders" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  parent_id = aws_api_gateway_rest_api.this.root_resource_id
+
+  path_part = "orders"
+
+}
+
+resource "aws_api_gateway_method" "place_order" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = "POST"
+
+  authorization = "NONE"
+
+}
+
+resource "aws_api_gateway_method" "orders_options" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = "OPTIONS"
+
+  authorization = "NONE"
+
+}
+
+resource "aws_api_gateway_integration" "place_order" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = aws_api_gateway_method.place_order.http_method
+
+  integration_http_method = "POST"
+
+  type = "AWS_PROXY"
+
+  uri = var.place_order_lambda_invoke_arn
+
+}
+
+resource "aws_api_gateway_integration" "orders_options" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = aws_api_gateway_method.orders_options.http_method
+
+  type = "MOCK"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+
+}
+
+resource "aws_lambda_permission" "place_order" {
+
+  statement_id = "AllowAPIGatewayInvokePlaceOrder"
+
+  action = "lambda:InvokeFunction"
+
+  function_name = var.place_order_lambda_function_name
+
+  principal = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.this.execution_arn}/*/*"
+
+}
+
+resource "aws_api_gateway_method_response" "orders_options" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = aws_api_gateway_method.orders_options.http_method
+
+  status_code = "200"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+}
+
+resource "aws_api_gateway_integration_response" "orders_options" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = aws_api_gateway_method.orders_options.http_method
+
+  status_code = aws_api_gateway_method_response.orders_options.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
+  }
+
+}
+
+
 resource "aws_api_gateway_deployment" "this" {
 
   depends_on = [
@@ -386,7 +507,9 @@ resource "aws_api_gateway_deployment" "this" {
     aws_api_gateway_integration.get_cart,
     aws_api_gateway_integration.update_cart,
     aws_api_gateway_integration.cart_options,
-    aws_api_gateway_integration.delete_cart
+    aws_api_gateway_integration.delete_cart,
+    aws_api_gateway_integration.place_order,
+    aws_api_gateway_integration.orders_options
   ]
 
   rest_api_id = aws_api_gateway_rest_api.this.id
@@ -404,7 +527,10 @@ resource "aws_api_gateway_deployment" "this" {
       aws_api_gateway_method.get_cart.id,
       aws_api_gateway_method.update_cart.id,
       aws_api_gateway_method.cart_options.id,
-      aws_api_gateway_method.delete_cart.id
+      aws_api_gateway_method.delete_cart.id,
+      aws_api_gateway_resource.orders.id,
+      aws_api_gateway_method.place_order.id,
+      aws_api_gateway_method.orders_options.id,
     ]))
   }
 
@@ -412,6 +538,9 @@ resource "aws_api_gateway_deployment" "this" {
     create_before_destroy = true
   }
 }
+
+
+
 
 resource "aws_api_gateway_stage" "dev" {
 

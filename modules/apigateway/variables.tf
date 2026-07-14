@@ -57,3 +57,11 @@ variable "delete_cart_lambda_invoke_arn" {
 variable "delete_cart_lambda_function_name" {
   type = string
 }
+
+variable "place_order_lambda_invoke_arn" {
+  type = string
+}
+
+variable "place_order_lambda_function_name" {
+  type = string
+}

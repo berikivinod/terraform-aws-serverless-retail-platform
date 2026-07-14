@@ -100,6 +100,8 @@ module "orders_table" {
   hash_key_type = "S"
 }
 
+
+
 module "users_table" {
 
   source = "./modules/dynamodb"
@@ -111,6 +113,17 @@ module "users_table" {
   hash_key_type = "S"
 }
 */
+
+module "orders_table" {
+
+  source = "./modules/dynamodb"
+
+  table_name = "vlr-orders"
+
+  hash_key = "orderId"
+
+  hash_key_type = "S"
+}
 
 module "products_lambda" {
 
@@ -216,6 +229,20 @@ module "delete_cart_lambda" {
 
 }
 
+module "place_order_lambda" {
+
+  source = "./modules/lambda"
+
+  function_name = "vlr-place-order"
+
+  filename = "${path.root}/lambda/orders/place-order/place-order.zip"
+
+  handler = "index.handler"
+
+  runtime = "nodejs20.x"
+
+}
+
 module "products_api" {
 
   source = "./modules/apigateway"
@@ -236,5 +263,7 @@ module "products_api" {
   update_cart_lambda_function_name = module.update_cart_lambda.function_name
   delete_cart_lambda_invoke_arn = module.delete_cart_lambda.lambda_invoke_arn
   delete_cart_lambda_function_name = module.delete_cart_lambda.function_name
+  place_order_lambda_invoke_arn = module.place_order_lambda.lambda_invoke_arn
+  place_order_lambda_function_name = module.place_order_lambda.function_name
 }
 
