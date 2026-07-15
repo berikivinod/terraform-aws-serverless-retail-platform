@@ -22,9 +22,9 @@ resource "aws_api_gateway_resource" "product_id" {
 
 resource "aws_api_gateway_resource" "search" {
 
-  rest_api_id =aws_api_gateway_rest_api.this.id
+  rest_api_id = aws_api_gateway_rest_api.this.id
 
-  parent_id =aws_api_gateway_resource.products.id
+  parent_id = aws_api_gateway_resource.products.id
 
   path_part = "search"
 }
@@ -62,9 +62,9 @@ resource "aws_api_gateway_method" "get_product_by_id" {
 
 resource "aws_api_gateway_method" "search_products" {
 
-  rest_api_id =aws_api_gateway_rest_api.this.id
+  rest_api_id = aws_api_gateway_rest_api.this.id
 
-  resource_id =aws_api_gateway_resource.search.id
+  resource_id = aws_api_gateway_resource.search.id
 
   http_method = "GET"
 
@@ -159,11 +159,11 @@ resource "aws_api_gateway_integration" "product_by_id" {
 
 resource "aws_api_gateway_integration" "search_products" {
 
-  rest_api_id =aws_api_gateway_rest_api.this.id
+  rest_api_id = aws_api_gateway_rest_api.this.id
 
-  resource_id =aws_api_gateway_resource.search.id
+  resource_id = aws_api_gateway_resource.search.id
 
-  http_method =aws_api_gateway_method.search_products.http_method
+  http_method = aws_api_gateway_method.search_products.http_method
 
   integration_http_method = "POST"
 
@@ -280,10 +280,10 @@ resource "aws_api_gateway_integration_response" "cart_options" {
   status_code = aws_api_gateway_method_response.cart_options.status_code
 
   response_parameters = {
-  "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
-  "method.response.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
-}
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
+  }
 }
 
 resource "aws_lambda_permission" "api_gateway" {
@@ -294,7 +294,7 @@ resource "aws_lambda_permission" "api_gateway" {
 
   function_name = var.lambda_function_name
 
-  principal = "apigateway.amazonaws.com"
+  principal  = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.this.execution_arn}/*/*"
 }
 
@@ -317,9 +317,9 @@ resource "aws_lambda_permission" "search_products" {
 
   action = "lambda:InvokeFunction"
 
-  function_name =var.search_lambda_function_name
+  function_name = var.search_lambda_function_name
 
-  principal ="apigateway.amazonaws.com"
+  principal  = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.this.execution_arn}/*/*"
 }
 
@@ -386,6 +386,16 @@ resource "aws_api_gateway_resource" "orders" {
 
 }
 
+resource "aws_api_gateway_resource" "order_id" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  parent_id = aws_api_gateway_resource.orders.id
+
+  path_part = "{orderId}"
+
+}
+
 resource "aws_api_gateway_method" "place_order" {
 
   rest_api_id = aws_api_gateway_rest_api.this.id
@@ -393,6 +403,30 @@ resource "aws_api_gateway_method" "place_order" {
   resource_id = aws_api_gateway_resource.orders.id
 
   http_method = "POST"
+
+  authorization = "NONE"
+
+}
+
+resource "aws_api_gateway_method" "get_orders" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = "GET"
+
+  authorization = "NONE"
+
+}
+
+resource "aws_api_gateway_method" "get_order_by_id" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.order_id.id
+
+  http_method = "GET"
 
   authorization = "NONE"
 
@@ -426,6 +460,38 @@ resource "aws_api_gateway_integration" "place_order" {
 
 }
 
+resource "aws_api_gateway_integration" "get_orders" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.orders.id
+
+  http_method = aws_api_gateway_method.get_orders.http_method
+
+  integration_http_method = "POST"
+
+  type = "AWS_PROXY"
+
+  uri = var.get_orders_lambda_invoke_arn
+
+}
+
+resource "aws_api_gateway_integration" "get_order_by_id" {
+
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  resource_id = aws_api_gateway_resource.order_id.id
+
+  http_method = aws_api_gateway_method.get_order_by_id.http_method
+
+  integration_http_method = "POST"
+
+  type = "AWS_PROXY"
+
+  uri = var.get_order_by_id_lambda_invoke_arn
+
+}
+
 resource "aws_api_gateway_integration" "orders_options" {
 
   rest_api_id = aws_api_gateway_rest_api.this.id
@@ -449,6 +515,34 @@ resource "aws_lambda_permission" "place_order" {
   action = "lambda:InvokeFunction"
 
   function_name = var.place_order_lambda_function_name
+
+  principal = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.this.execution_arn}/*/*"
+
+}
+
+resource "aws_lambda_permission" "get_orders" {
+
+  statement_id = "AllowAPIGatewayInvokeGetOrders"
+
+  action = "lambda:InvokeFunction"
+
+  function_name = var.get_orders_lambda_function_name
+
+  principal = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.this.execution_arn}/*/*"
+
+}
+
+resource "aws_lambda_permission" "get_order_by_id" {
+
+  statement_id = "AllowAPIGatewayInvokeGetOrderById"
+
+  action = "lambda:InvokeFunction"
+
+  function_name = var.get_order_by_id_lambda_function_name
 
   principal = "apigateway.amazonaws.com"
 
@@ -509,7 +603,9 @@ resource "aws_api_gateway_deployment" "this" {
     aws_api_gateway_integration.cart_options,
     aws_api_gateway_integration.delete_cart,
     aws_api_gateway_integration.place_order,
-    aws_api_gateway_integration.orders_options
+    aws_api_gateway_integration.orders_options,
+    aws_api_gateway_integration.get_orders,
+    aws_api_gateway_integration.get_order_by_id,
   ]
 
   rest_api_id = aws_api_gateway_rest_api.this.id
@@ -531,6 +627,9 @@ resource "aws_api_gateway_deployment" "this" {
       aws_api_gateway_resource.orders.id,
       aws_api_gateway_method.place_order.id,
       aws_api_gateway_method.orders_options.id,
+      aws_api_gateway_method.get_orders.id,
+      aws_api_gateway_resource.order_id.id,
+      aws_api_gateway_method.get_order_by_id.id,
     ]))
   }
 

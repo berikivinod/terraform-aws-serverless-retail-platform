@@ -26,7 +26,7 @@ resource "aws_iam_role" "ecs_task_execution" {
 
 resource "aws_iam_role_policy_attachment" "ecs_execution" {
 
-  role       = aws_iam_role.ecs_task_execution.name
+  role = aws_iam_role.ecs_task_execution.name
 
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "app" {
 
   container_definitions = jsonencode([
     {
-      name  = "app"
+      name = "app"
 
       image = "${var.ecr_repository_url}:latest"
 
@@ -123,10 +123,10 @@ resource "aws_security_group" "ecs" {
 
 resource "aws_security_group_rule" "alb_to_ecs" {
 
-  type                     = "ingress"
-  from_port                = 3000
-  to_port                  = 3000
-  protocol                 = "tcp"
+  type      = "ingress"
+  from_port = 3000
+  to_port   = 3000
+  protocol  = "tcp"
 
   security_group_id        = aws_security_group.ecs.id
   source_security_group_id = var.alb_security_group_id
@@ -161,8 +161,8 @@ resource "aws_ecs_service" "app" {
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.app.arn
 
-  launch_type   = "FARGATE"
-  desired_count = 1
+  launch_type                       = "FARGATE"
+  desired_count                     = 1
   health_check_grace_period_seconds = 120
 
   network_configuration {

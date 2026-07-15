@@ -13,11 +13,13 @@
 
 # 📖 Overview
 
-This repository provisions the AWS infrastructure required to deploy a cloud-native serverless e-commerce platform using **Terraform**.
+This repository provisions the complete AWS infrastructure required to deploy a cloud-native luxury retail e-commerce platform using **Terraform**.
 
-The infrastructure combines containerized frontend hosting with serverless backend services using reusable Terraform modules and Infrastructure as Code (IaC) best practices.
+The infrastructure combines a containerized frontend hosted on **Amazon ECS Fargate** with a scalable **AWS Serverless backend** powered by **Amazon API Gateway**, **AWS Lambda**, and **Amazon DynamoDB**.
 
-This repository focuses exclusively on the AWS infrastructure. The application source code is maintained in a separate repository.
+The project demonstrates Infrastructure as Code (IaC) best practices using reusable Terraform modules, modular architecture, and production-inspired AWS design patterns.
+
+This repository focuses exclusively on infrastructure provisioning. The application source code is maintained in a separate repository.
 
 ---
 
@@ -25,28 +27,31 @@ This repository focuses exclusively on the AWS infrastructure. The application s
 
 **Current Status:** Active Development
 
-## Completed
+## ✅ Completed
 
 - Product Catalog APIs
 - Product Details API
 - Product Search API
 - Shopping Cart APIs
-- Checkout
+- Checkout Infrastructure
 - Place Order API
+- Get Orders API
+- Get Order By ID API
 - Amazon ECS Deployment
 - AWS Lambda Integration
 - Amazon API Gateway
 - Amazon DynamoDB
-- Modular Terraform Design
+- Docker Deployment
+- Modular Terraform Architecture
 
-## Currently In Progress
+## 🚧 Currently In Progress
 
-- Order History APIs
-- Order Details API
-- Favorites APIs
+- Favorites Infrastructure
 - Address Management APIs
 - Payment Method APIs
 - Amazon Cognito Authentication
+- CloudFront Integration
+- CI/CD Automation
 
 ---
 
@@ -59,13 +64,13 @@ This repository focuses exclusively on the AWS infrastructure. The application s
 - Update Cart Quantity
 - Remove Cart Items
 - Checkout
-- Place Order
-- REST APIs using API Gateway
+- Order APIs
+- REST APIs using Amazon API Gateway
 - AWS Lambda Serverless Backend
 - Amazon DynamoDB Integration
 - Infrastructure as Code using Terraform
 - Dockerized Frontend Deployment
-- ECS Fargate Hosting
+- Amazon ECS Fargate Hosting
 
 ---
 
@@ -191,40 +196,55 @@ Deploys the containerized Next.js frontend using AWS Fargate.
 
 Deploys serverless Lambda functions for:
 
-- Product Catalog
-- Product Details
-- Product Search
-- Shopping Cart
+### Product APIs
+
+- Get Products
+- Get Product By ID
+- Search Products
+
+### Shopping Cart APIs
+
+- Get Cart
+- Add To Cart
 - Update Cart
 - Delete Cart
+
+### Order APIs
+
 - Place Order
+- Get Orders
+- Get Order By ID
 
 ---
 
 ## API Gateway
 
-Creates REST APIs for the application.
+Creates REST APIs.
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
-| GET | /products | Get all products |
-| GET | /products/{id} | Get product details |
+| GET | /products | Retrieve all products |
+| GET | /products/{id} | Retrieve product details |
 | GET | /products/search | Search products |
 | GET | /cart | Retrieve shopping cart |
 | POST | /cart | Add product to cart |
 | PUT | /cart | Update cart quantity |
 | DELETE | /cart | Remove cart item |
 | POST | /orders | Place customer order |
+| GET | /orders | Retrieve customer orders |
+| GET | /orders/{orderId} | Retrieve order details |
 
 ---
 
 ## DynamoDB
 
-Creates NoSQL tables:
+Creates:
 
 - vlr-products
 - vlr-cart
 - vlr-orders
+
+The Orders table includes a **Global Secondary Index (userId-index)** to efficiently retrieve customer orders.
 
 ---
 
@@ -232,7 +252,7 @@ Creates NoSQL tables:
 
 Creates DNS records pointing to the Application Load Balancer.
 
-(Optional)
+*(Optional)*
 
 ---
 
@@ -294,9 +314,9 @@ terraform destroy
 - IAM
 - CloudWatch
 - Docker
-- Modular Terraform Design
 - REST API Infrastructure
 - Serverless Architecture
+- Modular Terraform Design
 
 ---
 
@@ -305,14 +325,15 @@ terraform destroy
 This project demonstrates:
 
 - Modular Terraform architecture
-- AWS serverless application design
 - Infrastructure as Code best practices
-- Docker container deployment
-- REST API infrastructure
-- Event-driven AWS Lambda functions
-- Amazon DynamoDB integration
+- Cloud-native AWS architecture
+- Hybrid container and serverless deployment
 - Amazon ECS Fargate deployment
-- Production-style cloud architecture
+- AWS Lambda REST APIs
+- Amazon API Gateway
+- Amazon DynamoDB integration
+- Docker container deployment
+- Production-style cloud infrastructure
 
 ---
 
@@ -321,31 +342,24 @@ This project demonstrates:
 Planned improvements include:
 
 - Amazon Cognito Authentication
-- Role-Based Authorization
-- Favorites APIs
+- Favorites Infrastructure
 - Address Management APIs
 - Payment Method APIs
-- Order History APIs
-- Order Details APIs
 - CloudFront CDN
 - AWS WAF
 - HTTPS using ACM
 - GitHub Actions CI/CD
-- Blue/Green Deployment
+- Blue/Green Deployments
 - Terraform Remote State
 - Least-Privilege IAM Policies
 - CloudWatch Dashboards
 - AWS X-Ray Tracing
+- DynamoDB module modernization
+- API Gateway module refactoring
 
 ---
 
 # 🔗 Related Repositories
-
-## vinod-luxury-retail-local
-
-Local prototype built using JSON files without cloud services.
-
----
 
 ## vinod-luxury-retail-serverless
 
@@ -353,20 +367,27 @@ Contains:
 
 - Next.js Frontend
 - AWS Lambda Source Code
-- DynamoDB Import Scripts
+- DynamoDB Seed Scripts
+- Docker Configuration
 - Serverless Application Logic
+
+---
+
+## vinod-luxury-retail-local
+
+Local prototype built using JSON files without cloud services.
 
 ---
 
 # ⚠️ Disclaimer
 
-This repository was created for educational, learning, and portfolio purposes.
+This repository was created solely for educational, learning, and portfolio purposes.
 
-The infrastructure provisions AWS resources to support a sample luxury retail e-commerce application.
+The infrastructure provisions AWS resources supporting a fictional luxury retail e-commerce platform.
 
-All sample data, products, brands, customers, addresses, payment methods, and orders are **fictional** and intended solely for demonstrating cloud architecture, Infrastructure as Code, and serverless application development.
+All products, brands, customers, addresses, payment methods, shopping carts, favorites, and orders are **fictional sample data** created exclusively for learning and demonstration purposes.
 
-No proprietary business information, customer data, trademarks, or confidential assets are included.
+This repository contains no proprietary business information, customer data, trademarks, or confidential assets.
 
 ---
 

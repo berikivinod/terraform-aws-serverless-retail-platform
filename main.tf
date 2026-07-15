@@ -74,7 +74,7 @@ module "cart_table" {
 
   table_name = "vlr-cart"
 
-  hash_key = "userId"
+  hash_key      = "userId"
   hash_key_type = "S"
 }
 /*
@@ -123,6 +123,51 @@ module "orders_table" {
   hash_key = "orderId"
 
   hash_key_type = "S"
+
+  global_secondary_indexes = [
+
+    {
+
+      name = "userId-index"
+
+      hash_key = "userId"
+
+      hash_key_type = "S"
+
+      projection_type = "ALL"
+
+    }
+
+  ]
+
+}
+
+module "get_orders_lambda" {
+
+  source = "./modules/lambda"
+
+  function_name = "vlr-get-orders"
+
+  filename = "${path.root}/lambda/orders/get-orders/get-orders.zip"
+
+  handler = "index.handler"
+
+  runtime = "nodejs20.x"
+
+}
+
+module "get_order_by_id_lambda" {
+
+  source = "./modules/lambda"
+
+  function_name = "vlr-get-order-by-id"
+
+  filename = "${path.root}/lambda/orders/get-order-by-id/get-order-by-id.zip"
+
+  handler = "index.handler"
+
+  runtime = "nodejs20.x"
+
 }
 
 module "products_lambda" {
@@ -249,21 +294,25 @@ module "products_api" {
 
   api_name = "vlr-products-api"
 
-  lambda_invoke_arn = module.products_lambda.lambda_invoke_arn
-  lambda_function_name = module.products_lambda.function_name
-  product_by_id_lambda_invoke_arn = module.product_by_id_lambda.lambda_invoke_arn
-  product_by_id_lambda_function_name = module.product_by_id_lambda.function_name
-  search_lambda_invoke_arn = module.search_products_lambda.lambda_invoke_arn
-  search_lambda_function_name = module.search_products_lambda.function_name
-  add_to_cart_lambda_invoke_arn = module.add_to_cart_lambda.lambda_invoke_arn
-  add_to_cart_lambda_function_name = module.add_to_cart_lambda.function_name
-  get_cart_lambda_invoke_arn = module.get_cart_lambda.lambda_invoke_arn
-  get_cart_lambda_function_name = module.get_cart_lambda.function_name
-  update_cart_lambda_invoke_arn    = module.update_cart_lambda.lambda_invoke_arn
-  update_cart_lambda_function_name = module.update_cart_lambda.function_name
-  delete_cart_lambda_invoke_arn = module.delete_cart_lambda.lambda_invoke_arn
-  delete_cart_lambda_function_name = module.delete_cart_lambda.function_name
-  place_order_lambda_invoke_arn = module.place_order_lambda.lambda_invoke_arn
-  place_order_lambda_function_name = module.place_order_lambda.function_name
+  lambda_invoke_arn                    = module.products_lambda.lambda_invoke_arn
+  lambda_function_name                 = module.products_lambda.function_name
+  product_by_id_lambda_invoke_arn      = module.product_by_id_lambda.lambda_invoke_arn
+  product_by_id_lambda_function_name   = module.product_by_id_lambda.function_name
+  search_lambda_invoke_arn             = module.search_products_lambda.lambda_invoke_arn
+  search_lambda_function_name          = module.search_products_lambda.function_name
+  add_to_cart_lambda_invoke_arn        = module.add_to_cart_lambda.lambda_invoke_arn
+  add_to_cart_lambda_function_name     = module.add_to_cart_lambda.function_name
+  get_cart_lambda_invoke_arn           = module.get_cart_lambda.lambda_invoke_arn
+  get_cart_lambda_function_name        = module.get_cart_lambda.function_name
+  update_cart_lambda_invoke_arn        = module.update_cart_lambda.lambda_invoke_arn
+  update_cart_lambda_function_name     = module.update_cart_lambda.function_name
+  delete_cart_lambda_invoke_arn        = module.delete_cart_lambda.lambda_invoke_arn
+  delete_cart_lambda_function_name     = module.delete_cart_lambda.function_name
+  place_order_lambda_invoke_arn        = module.place_order_lambda.lambda_invoke_arn
+  place_order_lambda_function_name     = module.place_order_lambda.function_name
+  get_orders_lambda_invoke_arn         = module.get_orders_lambda.lambda_invoke_arn
+  get_orders_lambda_function_name      = module.get_orders_lambda.function_name
+  get_order_by_id_lambda_invoke_arn    = module.get_order_by_id_lambda.lambda_invoke_arn
+  get_order_by_id_lambda_function_name = module.get_order_by_id_lambda.function_name
 }
 

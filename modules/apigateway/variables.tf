@@ -65,3 +65,19 @@ variable "place_order_lambda_invoke_arn" {
 variable "place_order_lambda_function_name" {
   type = string
 }
+
+variable "get_orders_lambda_invoke_arn" {
+  type = string
+}
+
+variable "get_orders_lambda_function_name" {
+  type = string
+}
+
+variable "get_order_by_id_lambda_invoke_arn" {
+  type = string
+}
+
+variable "get_order_by_id_lambda_function_name" {
+  type = string
+}
