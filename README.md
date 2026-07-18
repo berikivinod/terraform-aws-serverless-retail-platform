@@ -13,13 +13,31 @@
 
 # 📖 Overview
 
-This repository provisions the complete AWS infrastructure required to deploy a cloud-native luxury retail e-commerce platform using **Terraform**.
+This repository provisions the complete AWS infrastructure required to deploy the **Vinod Luxury Retail (VLR)** cloud-native e-commerce platform using **Terraform**.
 
-The infrastructure combines a containerized frontend hosted on **Amazon ECS Fargate** with a scalable **AWS Serverless backend** powered by **Amazon API Gateway**, **AWS Lambda**, and **Amazon DynamoDB**.
+The infrastructure combines a containerized frontend running on **Amazon ECS Fargate** with a scalable serverless backend powered by **Amazon API Gateway**, **AWS Lambda**, and **Amazon DynamoDB**.
 
-The project demonstrates Infrastructure as Code (IaC) best practices using reusable Terraform modules, modular architecture, and production-inspired AWS design patterns.
+The project demonstrates Infrastructure as Code (IaC) best practices using reusable Terraform modules, modular architecture, least-privilege IAM policies, and production-inspired AWS design patterns.
 
-This repository focuses exclusively on infrastructure provisioning. The application source code is maintained in a separate repository.
+This repository provisions infrastructure only. The application source code, frontend, Lambda business logic, and UI are maintained in the companion application repository.
+
+---
+
+# 🎯 Project Objectives
+
+This project demonstrates how to build a production-style cloud-native retail platform using modern AWS services.
+
+Key objectives include:
+
+- Infrastructure as Code using Terraform
+- Modular Terraform architecture
+- Containerized frontend deployment
+- Serverless backend architecture
+- REST API infrastructure
+- Amazon DynamoDB data modeling
+- Secure IAM design
+- Production-style AWS networking
+- Cloud-native application deployment
 
 ---
 
@@ -29,83 +47,7 @@ This repository focuses exclusively on infrastructure provisioning. The applicat
 
 ## ✅ Completed
 
-- Product Catalog APIs
-- Product Details API
-- Product Search API
-- Shopping Cart APIs
-- Checkout Infrastructure
-- Place Order API
-- Get Orders API
-- Get Order By ID API
-- Amazon ECS Deployment
-- AWS Lambda Integration
-- Amazon API Gateway
-- Amazon DynamoDB
-- Docker Deployment
-- Modular Terraform Architecture
-
-## 🚧 Currently In Progress
-
-- Favorites Infrastructure
-- Address Management APIs
-- Payment Method APIs
-- Amazon Cognito Authentication
-- CloudFront Integration
-- CI/CD Automation
-
----
-
-# ✨ Current Features
-
-- Product Catalog
-- Product Details
-- Product Search
-- Shopping Cart
-- Update Cart Quantity
-- Remove Cart Items
-- Checkout
-- Order APIs
-- REST APIs using Amazon API Gateway
-- AWS Lambda Serverless Backend
-- Amazon DynamoDB Integration
-- Infrastructure as Code using Terraform
-- Dockerized Frontend Deployment
-- Amazon ECS Fargate Hosting
-
----
-
-# 🏗 Architecture
-
-```text
-                    Internet
-                        │
-                        ▼
-         Application Load Balancer
-                        │
-                        ▼
-              Amazon ECS Fargate
-                        │
-                        ▼
-              Next.js Frontend
-                        │
-                        ▼
-              Amazon API Gateway
-                        │
-        ┌───────────────┼────────────────┐
-        ▼               ▼                ▼
- Product APIs      Shopping Cart      Order APIs
-        │               │                │
-        └───────────────┼────────────────┘
-                        ▼
-                  AWS Lambda
-                        │
-                        ▼
-               Amazon DynamoDB
-```
-
----
-
-# 🚀 AWS Services Provisioned
+### Infrastructure
 
 - Amazon VPC
 - Public Subnets
@@ -121,25 +63,242 @@ This repository focuses exclusively on infrastructure provisioning. The applicat
 - Amazon DynamoDB
 - CloudWatch Logs
 - IAM Roles & Policies
-- Route53 (Optional)
+- Docker Deployment
+- Modular Terraform Architecture
+
+### Serverless APIs
+
+- Product Catalog API
+- Product Details API
+- Product Search API
+- Place Order API
+- Get Orders API
+- Get Order By ID API
+
+### Database
+
+- Products Table
+- Orders Table
+- Global Secondary Index (userId-index)
+
+## 🚧 Currently In Progress
+
+- Favorites Infrastructure
+- Amazon Cognito Integration
+- Address Management APIs
+- Payment Method APIs
+- CloudFront Integration
+- CI/CD Automation
+
+# ✨ Current Features
+
+## 🌐 Cloud Infrastructure
+
+- Infrastructure as Code using Terraform
+- Modular Terraform Architecture
+- Amazon VPC Networking
+- Application Load Balancer
+- Amazon ECS Fargate
+- Amazon ECR Integration
+- CloudWatch Logging
+- IAM Roles & Policies
 
 ---
 
+## 🚀 Serverless Backend
+
+- Product Catalog APIs
+- Product Details API
+- Product Search API
+- Order Management APIs
+- Amazon API Gateway
+- AWS Lambda
+- Amazon DynamoDB
+- CloudWatch Monitoring
+
+---
+
+## 📦 Order Management Infrastructure
+
+The infrastructure provisions a complete serverless order management platform.
+
+### Supported Components
+
+- Place Order API
+- Get Orders API
+- Get Order By ID API
+- Orders DynamoDB Table
+- Global Secondary Index (userId-index)
+- API Gateway Integration
+- Lambda IAM Permissions
+- CloudWatch Log Groups
+
+---
+
+## 🏗 Container Platform
+
+- Amazon ECS Cluster
+- AWS Fargate
+- Docker Container Deployment
+- Application Load Balancer
+- Security Groups
+- Auto Scaling Ready
+
+---
+
+# 🏗 Solution Architecture
+
+```text
+                                Internet
+                                    │
+                                    ▼
+                      Application Load Balancer
+                                    │
+                                    ▼
+                          Amazon ECS Fargate
+                                    │
+                                    ▼
+                            Next.js Frontend
+                                    │
+                                    ▼
+                           Amazon API Gateway
+                                    │
+        ┌───────────────────────────┼────────────────────────────┐
+        ▼                           ▼                            ▼
+ Product APIs                 Search APIs                  Order APIs
+        │                           │                            │
+        └───────────────────────────┼────────────────────────────┘
+                                    ▼
+                              AWS Lambda
+                                    │
+                  ┌─────────────────┴─────────────────┐
+                  ▼                                   ▼
+        Products DynamoDB                    Orders DynamoDB
+                                                   │
+                                                   ▼
+                                  Global Secondary Index
+                                         (userId-index)
+```
+
+---
+
+# 🔄 Order Management Workflow
+
+```text
+Customer Checkout
+        │
+        ▼
+Amazon API Gateway
+        │
+        ▼
+Place Order Lambda
+        │
+        ▼
+Orders DynamoDB
+        │
+        ▼
+Get Orders Lambda
+        │
+        ▼
+Customer Order History
+        │
+        ▼
+Get Order Details Lambda
+        │
+        ▼
+Order Details Page
+```
+
+---
+
+# ☁️ AWS Services Provisioned
+
+## Networking
+
+- Amazon VPC
+- Public Subnets
+- Internet Gateway
+- Route Tables
+- Security Groups
+
+---
+
+## Compute
+
+- Amazon ECS Cluster
+- AWS Fargate
+- AWS Lambda
+
+---
+
+## Containers
+
+- Amazon ECR
+- Docker Images
+
+---
+
+## API Layer
+
+- Amazon API Gateway
+- REST API Endpoints
+
+---
+
+## Database
+
+- Amazon DynamoDB
+  - Products Table
+  - Orders Table
+  - Global Secondary Index (userId-index)
+
+---
+
+## Monitoring
+
+- Amazon CloudWatch Logs
+- Lambda Logging
+- ECS Log Groups
+
+---
+
+## Security
+
+- IAM Roles
+- IAM Policies
+- Lambda Execution Roles
+- ECS Task Execution Role
+
+---
+
+## Networking & Routing
+
+- Application Load Balancer
+- Route53 (Optional)
 # 📁 Repository Structure
 
 ```text
 terraform-aws-serverless-ecommerce-platform
 
 ├── lambda/
-│   ├── cart/
 │   ├── orders/
-│   └── products/
+│   │   ├── place-order/
+│   │   ├── get-orders/
+│   │   └── get-order-by-id/
+│   │
+│   ├── products/
+│   │   ├── get-products/
+│   │   ├── get-product-by-id/
+│   │   └── search-products/
+│   │
+│   └── shared/
 │
 ├── modules/
 │   ├── alb/
 │   ├── apigateway/
 │   ├── dynamodb/
 │   ├── ecs/
+│   ├── iam/
 │   ├── lambda/
 │   ├── route53/
 │   └── vpc/
@@ -156,45 +315,52 @@ terraform-aws-serverless-ecommerce-platform
 
 # 📦 Terraform Modules
 
-## VPC
-
-Creates:
-
-- VPC
-- Public Subnets
-- Internet Gateway
-- Route Tables
+The infrastructure is organized into reusable Terraform modules to improve maintainability and scalability.
 
 ---
 
-## Application Load Balancer
+## 🌐 VPC Module
+
+Creates:
+
+- Amazon VPC
+- Public Subnets
+- Internet Gateway
+- Route Tables
+- Route Table Associations
+
+---
+
+## ⚖️ Application Load Balancer Module
 
 Creates:
 
 - Application Load Balancer
 - Target Groups
-- Listeners
+- HTTP Listener
 - Security Groups
+
+Routes external traffic to the ECS service.
 
 ---
 
-## ECS
+## 🚢 ECS Module
 
 Creates:
 
-- ECS Cluster
+- Amazon ECS Cluster
 - ECS Service
 - ECS Task Definition
 - CloudWatch Log Group
-- IAM Execution Role
+- ECS Task Execution Role
 
-Deploys the containerized Next.js frontend using AWS Fargate.
+Deploys the Dockerized Next.js application using AWS Fargate.
 
 ---
 
-## Lambda
+## ⚡ Lambda Module
 
-Deploys serverless Lambda functions for:
+Deploys all serverless Lambda functions.
 
 ### Product APIs
 
@@ -202,87 +368,140 @@ Deploys serverless Lambda functions for:
 - Get Product By ID
 - Search Products
 
-### Shopping Cart APIs
-
-- Get Cart
-- Add To Cart
-- Update Cart
-- Delete Cart
-
 ### Order APIs
 
 - Place Order
 - Get Orders
 - Get Order By ID
 
+Each Lambda includes:
+
+- CloudWatch Logging
+- IAM Execution Role
+- API Gateway Integration
+- DynamoDB Permissions
+
 ---
 
-## API Gateway
+## 🌍 API Gateway Module
 
-Creates REST APIs.
+Creates REST APIs that expose the serverless backend.
+
+### Products
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
 | GET | /products | Retrieve all products |
 | GET | /products/{id} | Retrieve product details |
 | GET | /products/search | Search products |
-| GET | /cart | Retrieve shopping cart |
-| POST | /cart | Add product to cart |
-| PUT | /cart | Update cart quantity |
-| DELETE | /cart | Remove cart item |
+
+### Orders
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
 | POST | /orders | Place customer order |
-| GET | /orders | Retrieve customer orders |
-| GET | /orders/{orderId} | Retrieve order details |
+| GET | /orders | Retrieve customer order history |
+| GET | /orders/{orderId} | Retrieve customer order details |
 
 ---
 
-## DynamoDB
+## 🗄 DynamoDB Module
 
-Creates:
+Creates the following tables.
 
-- vlr-products
-- vlr-cart
-- vlr-orders
+### Products Table
 
-The Orders table includes a **Global Secondary Index (userId-index)** to efficiently retrieve customer orders.
+**Table Name**
+
+```
+vlr-products
+```
+
+Stores:
+
+- Product Catalog
+- Pricing
+- Images
+- Brand Information
+- Product Metadata
 
 ---
 
-## Route53
+### Orders Table
+
+**Table Name**
+
+```
+vlr-orders
+```
+
+Stores:
+
+- Customer Orders
+- Purchased Products
+- Order Status
+- Payment Information
+- Shipping Information
+- Tracking Information
+- Order Totals
+
+---
+
+### Global Secondary Index
+
+```
+userId-index
+```
+
+Purpose:
+
+Efficiently retrieves all orders belonging to a customer without scanning the table.
+
+---
+
+## 🌎 Route53 Module
+
+(Optional)
 
 Creates DNS records pointing to the Application Load Balancer.
-
-*(Optional)*
 
 ---
 
 # 🚀 Deployment
 
-## Initialize
+## 1. Initialize Terraform
 
 ```bash
 terraform init
 ```
 
-## Validate
+---
+
+## 2. Validate Configuration
 
 ```bash
 terraform validate
 ```
 
-## Review Infrastructure
+---
+
+## 3. Review Infrastructure Changes
 
 ```bash
 terraform plan
 ```
 
-## Deploy
+---
+
+## 4. Deploy Infrastructure
 
 ```bash
 terraform apply
 ```
 
-## Destroy
+---
+
+## 5. Destroy Infrastructure
 
 ```bash
 terraform destroy
@@ -292,70 +511,236 @@ terraform destroy
 
 # 📋 Prerequisites
 
+Before deploying, ensure the following tools and services are available.
+
+## Software
+
 - Terraform 1.x
 - AWS CLI
-- AWS Account
 - Docker Desktop
-- Amazon ECR Repository
-- Configured AWS Credentials
+- Git
 
 ---
 
-# 📊 Skills Demonstrated
+## AWS
+
+- AWS Account
+- Configured AWS Credentials
+- Amazon ECR Repository
+
+---
+
+## Knowledge
+
+Basic understanding of:
 
 - Terraform
-- Infrastructure as Code
-- AWS Networking
+- AWS IAM
+- Amazon ECS
+- AWS Lambda
+- API Gateway
+- Amazon DynamoDB
+# 📊 Skills Demonstrated
+
+This project demonstrates hands-on experience with modern cloud infrastructure and Infrastructure as Code (IaC).
+
+## Infrastructure as Code
+
+- Terraform
+- Modular Terraform Design
+- Reusable Infrastructure Modules
+- Infrastructure Automation
+- Environment Configuration Management
+
+---
+
+## AWS Cloud Services
+
+- Amazon VPC
 - Amazon ECS
 - AWS Fargate
+- Application Load Balancer
 - Amazon API Gateway
 - AWS Lambda
 - Amazon DynamoDB
+- Amazon ECR
 - IAM
 - CloudWatch
-- Docker
+- Route53
+
+---
+
+## Serverless
+
 - REST API Infrastructure
+- Lambda Deployment
+- API Gateway Integration
+- DynamoDB Integration
 - Serverless Architecture
-- Modular Terraform Design
+
+---
+
+## DevOps
+
+- Docker
+- Container Deployment
+- Infrastructure Automation
+- Cloud-Native Infrastructure
+- Git
+- GitHub
+
+---
+
+## Architecture
+
+- Cloud-Native Architecture
+- Hybrid Container & Serverless Design
+- Microservice-Oriented Infrastructure
+- Modular Infrastructure Design
+- Production-Style AWS Architecture
 
 ---
 
 # 🌟 Portfolio Highlights
 
-This project demonstrates:
+This project demonstrates the design and implementation of a production-inspired AWS infrastructure supporting a cloud-native luxury retail application.
 
+Highlights include:
+
+- Infrastructure as Code using Terraform
 - Modular Terraform architecture
-- Infrastructure as Code best practices
-- Cloud-native AWS architecture
 - Hybrid container and serverless deployment
-- Amazon ECS Fargate deployment
-- AWS Lambda REST APIs
-- Amazon API Gateway
-- Amazon DynamoDB integration
+- Amazon ECS Fargate frontend hosting
+- REST APIs using Amazon API Gateway
+- AWS Lambda serverless backend
+- Amazon DynamoDB data modeling
+- Complete serverless order management infrastructure
+- Global Secondary Index (userId-index) for efficient order retrieval
+- IAM least-privilege security model
+- CloudWatch logging and monitoring
 - Docker container deployment
-- Production-style cloud infrastructure
+- Production-style AWS networking
+- Infrastructure separated from application code
 
 ---
 
-# 🔄 Future Enhancements
+# 📈 Current Infrastructure
 
-Planned improvements include:
+## Networking
 
-- Amazon Cognito Authentication
-- Favorites Infrastructure
-- Address Management APIs
-- Payment Method APIs
-- CloudFront CDN
+- Amazon VPC
+- Public Subnets
+- Internet Gateway
+- Route Tables
+- Security Groups
+
+---
+
+## Compute
+
+- Amazon ECS Cluster
+- AWS Fargate
+- AWS Lambda
+
+---
+
+## API Layer
+
+- Amazon API Gateway
+- Product APIs
+- Search APIs
+- Order APIs
+
+---
+
+## Database
+
+### Products
+
+- Product Catalog
+- Product Information
+- Pricing
+- Images
+
+### Orders
+
+- Customer Orders
+- Purchased Products
+- Order Status
+- Shipping Information
+- Payment Information
+- Tracking Details
+- Order Totals
+
+---
+
+## Monitoring
+
+- CloudWatch Log Groups
+- ECS Logging
+- Lambda Logging
+
+---
+
+## Security
+
+- IAM Roles
+- IAM Policies
+- Lambda Execution Roles
+- ECS Task Execution Roles
+
+---
+
+# 🔄 Infrastructure Roadmap
+
+The following infrastructure enhancements are planned.
+
+## Customer Experience
+
+- Favorites (Wishlist)
+- Address Management
+- Payment Methods
+- User Profile
+
+---
+
+## Security
+
+- Amazon Cognito
+- JWT Authorization
+- AWS Secrets Manager
 - AWS WAF
 - HTTPS using ACM
-- GitHub Actions CI/CD
-- Blue/Green Deployments
+
+---
+
+## DevOps
+
+- GitHub Actions
+- CI/CD Pipeline
+- Blue/Green Deployment
 - Terraform Remote State
-- Least-Privilege IAM Policies
+- Automated Lambda Packaging
+
+---
+
+## Observability
+
 - CloudWatch Dashboards
-- AWS X-Ray Tracing
-- DynamoDB module modernization
-- API Gateway module refactoring
+- CloudWatch Alarms
+- AWS X-Ray
+- Application Monitoring
+- Cost Monitoring
+
+---
+
+## Scalability
+
+- CloudFront CDN
+- Amazon S3 Static Assets
+- Lambda Layers
+- API Versioning
+- Multi-Environment Deployment
 
 ---
 
@@ -363,31 +748,37 @@ Planned improvements include:
 
 ## vinod-luxury-retail-serverless
 
-Contains:
+Application repository containing:
 
 - Next.js Frontend
-- AWS Lambda Source Code
+- React Components
+- TypeScript Source Code
+- AWS Lambda Business Logic
+- REST API Integration
 - DynamoDB Seed Scripts
 - Docker Configuration
-- Serverless Application Logic
 
 ---
 
 ## vinod-luxury-retail-local
 
-Local prototype built using JSON files without cloud services.
+Prototype version of the application using local JSON data before migrating to AWS serverless services.
 
 ---
 
 # ⚠️ Disclaimer
 
-This repository was created solely for educational, learning, and portfolio purposes.
+This repository was created exclusively for educational, learning, and portfolio purposes.
 
-The infrastructure provisions AWS resources supporting a fictional luxury retail e-commerce platform.
+The infrastructure provisions AWS resources supporting a fictional luxury retail e-commerce platform and demonstrates modern cloud-native application deployment using Terraform and AWS.
 
-All products, brands, customers, addresses, payment methods, shopping carts, favorites, and orders are **fictional sample data** created exclusively for learning and demonstration purposes.
+All products, customers, stores, orders, payment methods, addresses, favorites, and other business data referenced by this project are fictional sample data created solely for demonstration purposes.
 
-This repository contains no proprietary business information, customer data, trademarks, or confidential assets.
+This project is **not affiliated with, endorsed by, sponsored by, or associated with any retailer, luxury brand, company, or organization**.
+
+Any resemblance to actual companies, products, brands, services, organizations, or trademarks is purely coincidental.
+
+No commercial use is intended.
 
 ---
 
@@ -395,7 +786,7 @@ This repository contains no proprietary business information, customer data, tra
 
 **Vinod Beriki**
 
-DevOps Engineer | AWS | Terraform | Kubernetes | Docker | Serverless
+DevOps Engineer | AWS | Terraform | Kubernetes | Docker | Serverless | React | Next.js | TypeScript
 
 GitHub
 
